@@ -1,0 +1,39 @@
+# netlify.toml
+# Netlify build configuration for American Foundations
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Redirect /articles to the archive page cleanly
+[[redirects]]
+  from  = "/articles"
+  to    = "/articles/index.html"
+  status = 200
+
+# Pretty URLs — remove .html extension
+[[plugins]]
+  package = "@netlify/plugin-sitemap"
+
+# Security & performance headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options        = "DENY"
+    X-XSS-Protection       = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy        = "strict-origin-when-cross-origin"
+
+# Cache static assets aggressively
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

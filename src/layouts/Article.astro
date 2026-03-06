@@ -1,0 +1,441 @@
+---
+// src/layouts/Article.astro
+// Layout for individual blog post pages
+import Base from './Base.astro';
+
+export interface Props {
+  title:      string;
+  date:       string;        // ISO 8601 e.g. "2026-03-10"
+  pillar:     string;        // "principles" | "economy" | "world" | "culture" | "news" | "govt"
+  day:        string;        // "monday" | "tuesday" etc.
+  column:     string;        // "The Foundation" | "The Brief" etc.
+  description: string;
+  readTime?:  string;        // e.g. "8 min read"
+  nextTitle?: string;
+  nextSlug?:  string;
+  nextDate?:  string;
+  nextPillar?: string;
+}
+
+const {
+  title, date, pillar, day, column,
+  description, readTime = '8 min read',
+  nextTitle, nextSlug, nextDate, nextPillar,
+} = Astro.props;
+
+// Format date for display
+const displayDate = new Date(date + 'T12:00:00').toLocaleDateString('en-US', {
+  weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+});
+
+// Pillar display name map
+const pillarNames: Record<string, string> = {
+  principles: 'Principles & Philosophy',
+  economy:    'Economy & Fiscal Policy',
+  world:      'America in the World',
+  culture:    'Family, Faith & Culture',
+  news:       'News & Commentary',
+  govt:       'Government & Elections',
+};
+const pillarName = pillarNames[pillar] ?? pillar;
+---
+
+<Base title={`${title} | American Foundations`} description={description}>
+
+  <!-- Reading progress bar -->
+  <div id="progress-bar" aria-hidden="true"></div>
+
+  <!-- ── ARTICLE HEADER ─────────────────────────────── -->
+  <div class="article-header">
+    <div class="article-header-inner">
+      <div class="article-kicker">
+        <span class={`pillar-dot pillar-dot--${pillar}`}></span>
+        {pillarName}
+        <span class="kicker-sep">·</span>
+        {column}
+      </div>
+      <h1 class="article-title">{title}</h1>
+      <p class="article-subtitle">{description}</p>
+      <div class="article-meta">
+        <span class="meta-item">{displayDate}</span>
+        <span class="meta-div" aria-hidden="true"></span>
+        <span class="meta-item">{readTime}</span>
+        <span class="meta-div" aria-hidden="true"></span>
+        <span class="meta-item">By Quenton Jordan</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ARTICLE BODY ───────────────────────────────── -->
+  <main class="article-body" id="article-content">
+    <slot/>
+  </main>
+
+  <!-- ── ARTICLE FOOTER ────────────────────────────── -->
+  <div class="article-foot">
+    <div class="article-foot-inner">
+
+      <!-- Next article -->
+      {nextSlug && (
+        <div class="next-wrap">
+          <p class="next-label">Next in the Series</p>
+          <a class="next-card" href={`/articles/${nextSlug}`}>
+            <div>
+              <p class={`next-pillar pillar-${nextPillar ?? 'principles'}`}>{nextDate}</p>
+              <p class="next-title">{nextTitle}</p>
+            </div>
+            <span class="next-arrow" aria-hidden="true">→</span>
+          </a>
+        </div>
+      )}
+
+      <!-- Share -->
+      <div class="share-row">
+        <span class="share-label">Share</span>
+        <a class="share-btn"
+           href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(Astro.url.href)}`}
+           target="_blank" rel="noopener">✕ Twitter</a>
+        <a class="share-btn"
+           href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(Astro.url.href)}`}
+           target="_blank" rel="noopener">Facebook</a>
+        <button class="share-btn" id="copy-btn">Copy Link</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── EMAIL SUBSCRIBE STRIP ─────────────────────── -->
+  <section class="email-strip">
+    <div class="email-strip-inner">
+      <div>
+        <h3>Get Every Article in Your Inbox</h3>
+        <p>Five days a week. No spam. Unsubscribe anytime.</p>
+      </div>
+      <form name="newsletter" method="POST" data-netlify="true" class="email-form" id="subscribe-form">
+        <input type="hidden" name="form-name" value="newsletter"/>
+        <input class="email-input" type="email" name="email"
+               placeholder="Your email address" aria-label="Email address" required/>
+        <button class="email-btn" type="submit">Subscribe</button>
+      </form>
+    </div>
+  </section>
+
+  <script>
+    // Progress bar
+    const bar = document.getElementById('progress-bar');
+    const content = document.getElementById('article-content');
+    window.addEventListener('scroll', () => {
+      if (!bar || !content) return;
+      const scrolled = window.scrollY - content.offsetTop;
+      const pct = Math.min(100, Math.max(0, (scrolled / content.offsetHeight) * 100));
+      bar.style.width = pct + '%';
+    }, { passive: true });
+
+    // Copy link
+    document.getElementById('copy-btn')?.addEventListener('click', () => {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        const btn = document.getElementById('copy-btn');
+        if (btn) { btn.textContent = '✓ Copied!'; setTimeout(() => btn.textContent = 'Copy Link', 2500); }
+      });
+    });
+  </script>
+
+</Base>
+
+<style>
+  /* Progress bar */
+  #progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px; width: 0%;
+    background: linear-gradient(90deg, var(--red), var(--gold));
+    z-index: 200;
+    transition: width .1s linear;
+  }
+
+  /* ── ARTICLE HEADER ─────────────────────────────────── */
+  .article-header {
+    background: var(--navy-deep);
+    padding: 110px 2rem 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  .article-header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle, rgba(200,168,75,.1) 1px, transparent 1px),
+      radial-gradient(circle, rgba(200,168,75,.06) 1px, transparent 1px);
+    background-size: 48px 48px, 24px 24px;
+    background-position: 0 0, 24px 24px;
+    pointer-events: none;
+  }
+  .article-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--red), var(--gold), var(--red));
+  }
+  .article-header-inner {
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+  .article-kicker {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+  .pillar-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+  }
+  .kicker-sep { opacity: .4; }
+  .article-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 50px);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 18px;
+    letter-spacing: -.5px;
+  }
+  .article-subtitle {
+    font-size: 18px;
+    font-style: italic;
+    color: rgba(255,255,255,.65);
+    line-height: 1.55;
+    margin-bottom: 28px;
+    max-width: 580px;
+  }
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .meta-item {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.45);
+  }
+  .meta-div { width: 1px; height: 12px; background: rgba(255,255,255,.15); }
+
+  /* ── ARTICLE BODY ───────────────────────────────────── */
+  .article-body {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 56px 2rem 80px;
+  }
+
+  /* Drop cap */
+  .article-body :global(> p:first-of-type::first-letter) {
+    font-family: 'Playfair Display', serif;
+    font-size: 5em;
+    font-weight: 900;
+    color: var(--navy);
+    float: left;
+    line-height: .8;
+    margin: 6px 8px -4px 0;
+  }
+
+  /* Prose */
+  .article-body :global(p) {
+    margin-bottom: 1.6em;
+    font-size: 18px;
+    line-height: 1.8;
+    color: var(--ink-mid);
+  }
+  .article-body :global(h2) {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 2.6em 0 .6em;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--gold);
+  }
+  .article-body :global(h3) {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 2em 0 .5em;
+  }
+  .article-body :global(blockquote) {
+    margin: 2em 0;
+    padding: 20px 26px;
+    background: #EEF2FA;
+    border-left: 5px solid var(--navy);
+    font-style: italic;
+    font-size: 17px;
+    color: var(--ink);
+    line-height: 1.65;
+  }
+  .article-body :global(strong) { color: var(--ink); font-weight: 600; }
+  .article-body :global(em) { font-style: italic; }
+  .article-body :global(ul), .article-body :global(ol) {
+    margin: 1.4em 0 1.4em 1.8em;
+    color: var(--ink-mid);
+    font-size: 17px;
+    line-height: 1.8;
+  }
+  .article-body :global(li) { margin-bottom: .5em; }
+  .article-body :global(hr) {
+    border: none;
+    border-top: 1px solid var(--gold);
+    opacity: .4;
+    margin: 2.4em 0;
+  }
+
+  /* ── ARTICLE FOOTER ─────────────────────────────────── */
+  .article-foot {
+    background: var(--cream-dk);
+    border-top: 1px solid var(--rule);
+    padding: 48px 2rem;
+  }
+  .article-foot-inner { max-width: 700px; margin: 0 auto; }
+
+  .next-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 14px;
+  }
+  .next-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 22px 26px;
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-left: 5px solid var(--red);
+    text-decoration: none;
+    margin-bottom: 32px;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .next-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,40,104,.08); }
+  .next-pillar {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .next-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.3;
+  }
+  .next-arrow { font-size: 26px; color: var(--gold); flex-shrink: 0; }
+
+  .share-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .share-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .share-btn {
+    padding: 7px 16px;
+    border: 1.5px solid var(--rule);
+    background: var(--white);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+    cursor: pointer;
+    transition: background .15s, border-color .15s;
+  }
+  .share-btn:hover { background: var(--navy); color: var(--white); border-color: var(--navy); }
+
+  /* ── EMAIL STRIP ────────────────────────────────────── */
+  .email-strip {
+    background: var(--navy);
+    padding: 48px 2rem;
+    border-top: 4px solid var(--gold);
+  }
+  .email-strip-inner {
+    max-width: 700px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 28px;
+    align-items: center;
+  }
+  .email-strip h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+  .email-strip p { font-size: 13px; font-style: italic; color: rgba(255,255,255,.55); }
+  .email-form { display: flex; }
+  .email-input {
+    padding: 12px 16px;
+    font-family: 'Source Serif 4', serif;
+    font-size: 14px;
+    background: rgba(255,255,255,.07);
+    border: 2px solid rgba(255,255,255,.15);
+    border-right: none;
+    color: var(--white);
+    outline: none;
+    width: 220px;
+    transition: border-color .2s;
+  }
+  .email-input::placeholder { color: rgba(255,255,255,.3); }
+  .email-input:focus { border-color: var(--gold); }
+  .email-btn {
+    padding: 12px 20px;
+    background: var(--red);
+    color: var(--white);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: background .2s;
+    white-space: nowrap;
+  }
+  .email-btn:hover { background: var(--red-dark); }
+
+  @media (max-width: 640px) {
+    .email-strip-inner { grid-template-columns: 1fr; }
+    .email-form { flex-direction: column; }
+    .email-input { width: 100%; border-right: 2px solid rgba(255,255,255,.15); border-bottom: none; }
+  }
+</style>

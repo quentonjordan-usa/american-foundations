@@ -1,0 +1,605 @@
+---
+// src/pages/index.astro
+import Base from '../layouts/Base.astro';
+
+// Pull all published articles, sorted newest first
+const allArticles = await Astro.glob('./articles/*.md');
+const articles = allArticles
+  .filter(a => {
+    // Only show articles whose date is today or in the past
+    const pub = new Date(a.frontmatter.date + 'T12:00:00');
+    return pub <= new Date();
+  })
+  .sort((a, b) =>
+    new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime()
+  );
+---
+
+<Base
+  title="American Foundations | Grounded in Principle. Clear in Purpose."
+  description="A daily conservative blog covering the principles, policies, and events that shape America. Published every weekday by Quenton Jordan."
+>
+
+  <!-- ── HERO ─────────────────────────────────────────── -->
+  <section class="hero">
+    <svg class="hero-flag" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice"
+         xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect width="1440" height="900" fill="#B22234"/>
+      <rect y="69"  width="1440" height="69" fill="#FFFFFF"/>
+      <rect y="207" width="1440" height="69" fill="#FFFFFF"/>
+      <rect y="345" width="1440" height="69" fill="#FFFFFF"/>
+      <rect y="483" width="1440" height="69" fill="#FFFFFF"/>
+      <rect y="621" width="1440" height="69" fill="#FFFFFF"/>
+      <rect y="759" width="1440" height="69" fill="#FFFFFF"/>
+      <rect width="576" height="484" fill="#002868"/>
+      <g fill="white" opacity="0.9">
+        {Array.from({length: 9}).map((_, row) =>
+          Array.from({length: row % 2 === 0 ? 6 : 5}).map((_, col) => (
+            <polygon
+              points="29,22 31,28 37,28 32,32 34,38 29,34 24,38 26,32 21,28 27,28"
+              transform={`translate(${col * 58 + (row % 2 === 1 ? 29 : 0)},${row * 54})`}
+            />
+          ))
+        )}
+      </g>
+    </svg>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-kicker">★ ★ ★ &nbsp; Conservative Analysis &nbsp; · &nbsp; Published Every Weekday</div>
+      <h1 class="hero-title">American <em>Foundations</em></h1>
+      <p class="hero-tagline">Grounded in Principle. Clear in Purpose.</p>
+      <p class="hero-desc">A daily conservative blog covering the principles, policies, and events that shape America — written for every citizen who believes this country's best days still lie ahead.</p>
+      <div class="hero-actions">
+        <a href="#articles" class="btn-primary">Read the Blog →</a>
+        <a href="#subscribe" class="btn-secondary-hero">Subscribe Free</a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stats-inner">
+        <div class="stat"><span class="stat-n">260</span><span class="stat-l">Articles / Year</span></div>
+        <div class="stat"><span class="stat-n">52</span><span class="stat-l">Weeks of Content</span></div>
+        <div class="stat"><span class="stat-n">6</span><span class="stat-l">Content Pillars</span></div>
+        <div class="stat"><span class="stat-n">5×</span><span class="stat-l">Weekly — Mon to Fri</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── ABOUT ──────────────────────────────────────────── -->
+  <section class="about" id="about">
+    <div class="about-inner">
+      <div class="about-text reveal">
+        <div class="section-label">About the Series</div>
+        <h2 class="section-title">The Ideas That Built America<br/>Are Worth <em>Defending</em></h2>
+        <p class="about-body">American Foundations was built on a simple conviction: the conservative case for America doesn't need to be complicated — it needs to be <strong>clear</strong>. Every weekday, this blog publishes principled analysis covering the full spectrum of conservative thought.</p>
+        <p class="about-body">No spin. No noise. No lectures. Just honest thinking grounded in the values that made this country great — written for everyday Americans who believe those values are worth standing up for.</p>
+        <div class="pillars-grid">
+          <div class="pillar-tag"><span class="dot"></span>Principles &amp; Philosophy</div>
+          <div class="pillar-tag"><span class="dot"></span>Economy &amp; Fiscal Policy</div>
+          <div class="pillar-tag"><span class="dot"></span>America in the World</div>
+          <div class="pillar-tag"><span class="dot"></span>Government &amp; Elections</div>
+          <div class="pillar-tag"><span class="dot"></span>Family, Faith &amp; Culture</div>
+          <div class="pillar-tag"><span class="dot"></span>News &amp; Commentary</div>
+        </div>
+        <a href="#articles" class="btn-primary" style="margin-top:8px">Browse All Articles →</a>
+      </div>
+
+      <!-- Author card -->
+      <div class="author-card reveal">
+        <div class="author-avatar" aria-hidden="true"><span class="author-initials">QJ</span></div>
+        <p class="author-intro-label">Written by</p>
+        <h3 class="author-name">Quenton Jordan</h3>
+        <p class="author-bio">Quenton Jordan writes on conservative politics, American history, and the principles that underpin a free society. American Foundations is his commitment to making conservative ideas accessible to every American who is ready to engage.</p>
+        <hr class="author-hr"/>
+        <div class="schedule-list">
+          {[
+            ['Monday',    'The Foundation',  'Principles'],
+            ['Tuesday',   'The Brief',       'Economy'],
+            ['Wednesday', 'News Day',        'Commentary'],
+            ['Thursday',  'The World View',  'Foreign Policy'],
+            ['Friday',    'The Heartland',   'Faith & Culture'],
+          ].map(([day, col, topic]) => (
+            <div class="sched-row">
+              <span class={`sched-badge ${day === 'Wednesday' ? 'sched-badge--news' : ''}`}>{day}</span>
+              <span class="sched-col">{col} —</span>
+              <span class="sched-topic">{topic}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── ARTICLES ───────────────────────────────────────── -->
+  <section class="articles-section" id="articles">
+    <div class="articles-inner">
+      <div class="articles-header reveal">
+        <div>
+          <div class="section-label">Blog Repository</div>
+          <h2 class="section-title">Start Reading</h2>
+        </div>
+        <a href="/articles" class="view-all">View Full Archive →</a>
+      </div>
+
+      <!-- Filter tabs — JS-powered -->
+      <div class="filter-tabs reveal" role="tablist">
+        {['all','principles','economy','world','culture','news','govt'].map(f => (
+          <button class={`ftab ${f === 'all' ? 'active' : ''}`} data-filter={f} role="tab">
+            {f === 'all' ? 'All' : f === 'govt' ? 'Gov\'t' : f.charAt(0).toUpperCase() + f.slice(1)}
+          </button>
+        ))}
+      </div>
+
+      <div class="articles-grid reveal" id="articles-grid">
+        {articles.slice(0, 6).map((article, i) => (
+          <a
+            class={`acard ${i === 0 ? 'acard--featured' : ''}`}
+            data-pillar={article.frontmatter.pillar}
+            href={article.url}
+          >
+            <div class="acard-body">
+              <span class={`acard-pillar pillar-${article.frontmatter.pillar}`}>
+                {article.frontmatter.pillarName ?? article.frontmatter.pillar}
+              </span>
+              <h3 class="acard-title">{article.frontmatter.title}</h3>
+              <p class="acard-excerpt">{article.frontmatter.description}</p>
+            </div>
+            <div class="acard-foot">
+              <span class="acard-date">
+                {new Date(article.frontmatter.date + 'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}
+              </span>
+              <span class="acard-read">Read →</span>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      {articles.length > 6 && (
+        <div class="articles-cta reveal">
+          <a href="/articles" class="btn-primary">View Full Archive →</a>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- ── SUBSCRIBE ──────────────────────────────────────── -->
+  <section class="subscribe-section" id="subscribe">
+    <div class="subscribe-inner reveal">
+      <span class="sub-stars" aria-hidden="true">★ ★ ★ ★ ★</span>
+      <h2 class="sub-title">Get Every Article<br/><em>Delivered to Your Inbox</em></h2>
+      <p class="sub-subtitle">Five days a week, Quenton Jordan delivers principled conservative analysis straight to your inbox. Join readers who refuse to let the noise drown out the truth.</p>
+      <form class="sub-form" name="newsletter" method="POST" data-netlify="true">
+        <input type="hidden" name="form-name" value="newsletter"/>
+        <input class="sub-input" type="email" name="email"
+               placeholder="Enter your email address" aria-label="Email address" required/>
+        <button class="sub-btn" type="submit">Subscribe Free</button>
+      </form>
+      <div class="sub-promise">
+        <span>✓ No spam</span>
+        <span>✓ Free forever</span>
+        <span>✓ Unsubscribe anytime</span>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Filter tabs
+    document.querySelectorAll('.ftab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const filter = (tab as HTMLElement).dataset.filter ?? 'all';
+        document.querySelectorAll('.acard').forEach(card => {
+          const el = card as HTMLElement;
+          el.style.display = (filter === 'all' || el.dataset.pillar === filter) ? 'flex' : 'none';
+        });
+      });
+    });
+  </script>
+
+</Base>
+
+<style>
+  /* ── HERO ───────────────────────────────────────────── */
+  .hero {
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+  .hero-flag {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    animation: flagWave 9s ease-in-out infinite;
+    transform-origin: left center;
+  }
+  @keyframes flagWave {
+    0%,100% { transform: skewX(0deg) scaleX(1); }
+    30%     { transform: skewX(-.8deg) scaleX(1.01); }
+    70%     { transform: skewX(.8deg) scaleX(.99); }
+  }
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(105deg, rgba(0,20,64,.94) 0%, rgba(0,20,64,.82) 55%, rgba(0,20,64,.58) 100%);
+    z-index: 1;
+  }
+  .hero-overlay::after {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle, rgba(200,168,75,.09) 1px, transparent 1px),
+      radial-gradient(circle, rgba(200,168,75,.05) 1px, transparent 1px);
+    background-size: 52px 52px, 26px 26px;
+    background-position: 0 0, 26px 26px;
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 130px 2rem 100px;
+    width: 100%;
+  }
+  .hero-kicker {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 22px;
+    animation: fadeUp .7s ease both .1s;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(44px, 7.5vw, 90px);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.0;
+    letter-spacing: -1px;
+    margin-bottom: 10px;
+    animation: fadeUp .7s ease both .25s;
+  }
+  .hero-title em { font-style: italic; color: var(--gold); display: block; }
+  .hero-tagline {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(14px, 2.2vw, 20px);
+    font-weight: 500;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.6);
+    margin-bottom: 32px;
+    animation: fadeUp .7s ease both .4s;
+  }
+  .hero-desc {
+    font-size: 18px;
+    font-style: italic;
+    color: rgba(255,255,255,.72);
+    line-height: 1.65;
+    max-width: 560px;
+    margin-bottom: 44px;
+    animation: fadeUp .7s ease both .55s;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    animation: fadeUp .7s ease both .7s;
+  }
+  .btn-secondary-hero {
+    display: inline-flex;
+    align-items: center;
+    padding: 13px 28px;
+    border: 2px solid rgba(255,255,255,.38);
+    color: var(--white);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: border-color .2s, color .2s;
+  }
+  .btn-secondary-hero:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* Stats */
+  .hero-stats {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    z-index: 2;
+    background: rgba(0,0,0,.32);
+    border-top: 1px solid rgba(200,168,75,.2);
+  }
+  .hero-stats-inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+  }
+  .stat {
+    flex: 1;
+    padding: 18px 0;
+    text-align: center;
+    border-right: 1px solid rgba(200,168,75,.15);
+  }
+  .stat:last-child { border-right: none; }
+  .stat-n {
+    display: block;
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .stat-l {
+    display: block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.45);
+    margin-top: 4px;
+  }
+
+  /* ── ABOUT ──────────────────────────────────────────── */
+  .about {
+    background: var(--white);
+    padding: 100px 2rem;
+    border-top: 4px solid var(--gold);
+  }
+  .about-inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 3.5vw, 40px);
+    font-weight: 900;
+    color: var(--navy);
+    line-height: 1.15;
+    margin-bottom: 24px;
+  }
+  .section-title em { font-style: italic; color: var(--red); }
+  .about-body { font-size: 17px; line-height: 1.8; color: var(--ink-mid); margin-bottom: 1.3em; }
+  .pillars-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 28px 0; }
+  .pillar-tag {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 11px 13px;
+    background: var(--cream);
+    border-left: 3px solid var(--navy);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--navy);
+    transition: border-color .2s, background .2s;
+  }
+  .pillar-tag:hover { border-color: var(--red); background: #f8eff1; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+
+  /* Author card */
+  .author-card {
+    background: var(--navy);
+    padding: 42px 38px;
+    position: relative;
+    overflow: hidden;
+  }
+  .author-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--red), var(--gold));
+  }
+  .author-card::after {
+    content: '"';
+    position: absolute; bottom: -24px; right: 18px;
+    font-family: 'Playfair Display', serif;
+    font-size: 200px;
+    font-weight: 900;
+    color: rgba(255,255,255,.035);
+    line-height: 1;
+    pointer-events: none;
+  }
+  .author-avatar {
+    width: 70px; height: 70px;
+    border-radius: 50%;
+    background: var(--navy-mid);
+    border: 3px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 18px;
+  }
+  .author-initials {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px; font-weight: 900;
+    color: var(--gold);
+  }
+  .author-intro-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 4px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 5px;
+  }
+  .author-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px; font-weight: 900;
+    color: var(--white); margin-bottom: 14px;
+  }
+  .author-bio { font-size: 14px; font-style: italic; color: rgba(255,255,255,.65); line-height: 1.75; margin-bottom: 24px; }
+  .author-hr { border: none; border-top: 1px solid rgba(200,168,75,.2); margin: 20px 0; }
+  .schedule-list { display: flex; flex-direction: column; gap: 7px; }
+  .sched-row { display: flex; align-items: center; gap: 10px; }
+  .sched-badge {
+    width: 88px; flex-shrink: 0;
+    padding: 4px 0; text-align: center;
+    background: rgba(255,255,255,.07);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: var(--gold);
+  }
+  .sched-badge--news { background: rgba(178,34,52,.28); color: #ffaab5; }
+  .sched-col { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; color: rgba(255,255,255,.45); }
+  .sched-topic { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; color: rgba(255,255,255,.8); }
+
+  /* ── ARTICLES ───────────────────────────────────────── */
+  .articles-section { background: var(--cream); padding: 100px 2rem; border-top: 1px solid var(--rule); }
+  .articles-inner { max-width: 1140px; margin: 0 auto; }
+  .articles-header {
+    display: flex; align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 36px; flex-wrap: wrap; gap: 16px;
+  }
+  .view-all {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--red); text-decoration: none;
+    display: flex; align-items: center; gap: 8px;
+    transition: gap .2s;
+  }
+  .view-all:hover { gap: 14px; }
+
+  /* Filter tabs */
+  .filter-tabs { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 32px; }
+  .ftab {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    padding: 7px 15px;
+    border: 1.5px solid var(--rule);
+    background: var(--white);
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: all .18s;
+  }
+  .ftab:hover, .ftab.active { background: var(--navy); color: var(--white); border-color: var(--navy); }
+
+  /* Article grid */
+  .articles-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+  .acard {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-top: 4px solid var(--navy);
+    text-decoration: none;
+    display: flex; flex-direction: column;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .acard:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(0,40,104,.09); }
+  .acard[data-pillar="principles"] { border-top-color: var(--navy); }
+  .acard[data-pillar="economy"]    { border-top-color: #1A5C1A; }
+  .acard[data-pillar="world"]      { border-top-color: #8B3A00; }
+  .acard[data-pillar="culture"]    { border-top-color: var(--red); }
+  .acard[data-pillar="news"]       { border-top-color: var(--gold); }
+  .acard[data-pillar="govt"]       { border-top-color: #5A1A8B; }
+  .acard--featured { grid-column: span 2; }
+  .acard-body { padding: 22px 22px 18px; flex: 1; }
+  .acard-pillar {
+    display: block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase;
+    margin-bottom: 9px;
+  }
+  .acard-title { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: var(--ink); line-height: 1.35; margin-bottom: 10px; }
+  .acard-excerpt { font-size: 13px; color: var(--ink-soft); line-height: 1.65; }
+  .acard-foot {
+    padding: 12px 22px;
+    border-top: 1px solid var(--rule);
+    background: var(--cream);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .acard-date { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-soft); }
+  .acard-read { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--red); }
+  .articles-cta { text-align: center; margin-top: 44px; }
+
+  /* ── SUBSCRIBE ──────────────────────────────────────── */
+  .subscribe-section {
+    background: var(--navy-deep);
+    padding: 100px 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .subscribe-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle, rgba(200,168,75,.07) 1px, transparent 1px),
+      radial-gradient(circle, rgba(200,168,75,.04) 1px, transparent 1px);
+    background-size: 48px 48px, 24px 24px;
+    background-position: 0 0, 24px 24px;
+  }
+  .subscribe-section::after {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--red), var(--gold), var(--red));
+  }
+  .subscribe-inner { max-width: 720px; margin: 0 auto; text-align: center; position: relative; z-index: 1; }
+  .sub-stars { display: block; font-size: 11px; letter-spacing: 10px; color: var(--gold); margin-bottom: 22px; }
+  .sub-title { font-family: 'Playfair Display', serif; font-size: clamp(26px, 4vw, 44px); font-weight: 900; color: var(--white); line-height: 1.15; margin-bottom: 16px; }
+  .sub-title em { font-style: italic; color: var(--gold); }
+  .sub-subtitle { font-size: 16px; font-style: italic; color: rgba(255,255,255,.58); line-height: 1.7; margin-bottom: 44px; }
+  .sub-form { display: flex; max-width: 500px; margin: 0 auto 18px; }
+  .sub-input {
+    flex: 1;
+    padding: 15px 18px;
+    font-family: 'Source Serif 4', serif;
+    font-size: 14px;
+    background: rgba(255,255,255,.07);
+    border: 2px solid rgba(255,255,255,.15);
+    border-right: none;
+    color: var(--white);
+    outline: none;
+    transition: border-color .2s;
+  }
+  .sub-input::placeholder { color: rgba(255,255,255,.3); }
+  .sub-input:focus { border-color: var(--gold); }
+  .sub-btn {
+    padding: 15px 26px;
+    background: var(--red);
+    color: var(--white);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    border: none; cursor: pointer;
+    transition: background .2s;
+    white-space: nowrap;
+  }
+  .sub-btn:hover { background: var(--red-dark); }
+  .sub-promise {
+    display: flex; align-items: center; justify-content: center;
+    gap: 24px; flex-wrap: wrap;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: rgba(255,255,255,.3);
+  }
+
+  /* ── RESPONSIVE ─────────────────────────────────────── */
+  @media (max-width: 900px) {
+    .about-inner { grid-template-columns: 1fr; gap: 48px; }
+    .articles-grid { grid-template-columns: 1fr 1fr; }
+    .acard--featured { grid-column: span 2; }
+  }
+  @media (max-width: 640px) {
+    .hero-stats-inner { flex-wrap: wrap; }
+    .stat { flex: 1 0 50%; border-right: none; border-bottom: 1px solid rgba(200,168,75,.12); }
+    .articles-grid { grid-template-columns: 1fr; }
+    .acard--featured { grid-column: span 1; }
+    .pillars-grid { grid-template-columns: 1fr; }
+    .sub-form { flex-direction: column; }
+    .sub-input { border-right: 2px solid rgba(255,255,255,.15); border-bottom: none; }
+  }
+</style>

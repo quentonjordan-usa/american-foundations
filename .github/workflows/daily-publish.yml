@@ -1,0 +1,42 @@
+# .github/workflows/daily-publish.yml
+#
+# ─────────────────────────────────────────────────────────────
+# AMERICAN FOUNDATIONS — DAILY AUTO-PUBLISH
+#
+# Fires Mon–Fri at 6:00 AM Central Time (11:00 UTC).
+# Triggers a Netlify build which:
+#   1. Rebuilds the site (new articles with today's date go live)
+#   2. Updates the RSS feed
+#   3. Beehiiv detects the RSS update and fires the email
+#
+# SETUP STEPS:
+#   1. In Netlify: Site Settings → Build & Deploy → Build hooks
+#      → Add build hook named "Daily Publish" → copy the URL
+#   2. In GitHub: Settings → Secrets and variables → Actions
+#      → New repository secret → Name: NETLIFY_BUILD_HOOK
+#      → Value: paste the Netlify hook URL
+# ─────────────────────────────────────────────────────────────
+
+name: Daily Publish
+
+on:
+  schedule:
+    # 11:00 UTC = 6:00 AM Central Time (UTC-5 in winter, UTC-6 in summer)
+    # Adjust to 12:00 UTC (7am CT) during daylight saving time if needed
+    - cron: '0 11 * * 1-5'   # Mon–Fri only
+
+  # Allow manual trigger from GitHub Actions tab (useful for testing)
+  workflow_dispatch:
+
+jobs:
+  trigger-netlify-deploy:
+    name: Trigger Netlify Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Ping Netlify build hook
+        run: |
+          echo "Triggering Netlify build at $(date -u)"
+          curl --silent --show-error --fail \
+            -X POST "${{ secrets.NETLIFY_BUILD_HOOK }}"
+          echo "Build triggered successfully."

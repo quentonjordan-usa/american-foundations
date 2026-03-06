@@ -1,0 +1,112 @@
+/* ── BRAND TOKENS ──────────────────────────────────────── */
+:root {
+  --navy:      #002868;
+  --navy-deep: #001440;
+  --navy-mid:  #001E54;
+  --red:       #B22234;
+  --red-dark:  #8C1A28;
+  --gold:      #C8A84B;
+  --gold-lt:   #E8C96A;
+  --cream:     #FAF7F2;
+  --cream-dk:  #F0EBE0;
+  --ink:       #1A1A1A;
+  --ink-mid:   #3D3D3D;
+  --ink-soft:  #5A5A5A;
+  --rule:      #DDD8CF;
+  --white:     #FFFFFF;
+}
+
+/* ── RESET ─────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: 'Source Serif 4', Georgia, serif;
+  background: var(--cream);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; }
+
+/* ── TYPOGRAPHY ────────────────────────────────────────── */
+h1, h2, h3, h4 {
+  font-family: 'Playfair Display', serif;
+  line-height: 1.15;
+}
+
+/* ── SHARED COMPONENTS ─────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 28px;
+  background: var(--red);
+  color: var(--white);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background .2s, transform .15s;
+}
+.btn-primary:hover { background: var(--red-dark); transform: translateY(-2px); }
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 28px;
+  background: transparent;
+  color: var(--navy);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 2px solid var(--navy);
+  cursor: pointer;
+  transition: all .2s;
+}
+.btn-secondary:hover { background: var(--navy); color: var(--white); }
+
+.section-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.section-label::after {
+  content: '';
+  width: 48px; height: 1px;
+  background: var(--gold);
+  opacity: .45;
+}
+
+/* ── SCROLL REVEAL ─────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── PILLAR COLORS ─────────────────────────────────────── */
+.pillar-principles { color: var(--navy); }
+.pillar-economy    { color: #1A5C1A; }
+.pillar-world      { color: #8B3A00; }
+.pillar-culture    { color: var(--red); }
+.pillar-news       { color: #7A6020; }
+.pillar-govt       { color: #5A1A8B; }
