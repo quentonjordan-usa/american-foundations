@@ -1,24 +1,16 @@
-# netlify.toml
-# Netlify build configuration for American Foundations
-
 [build]
-  command = "npm run build"
+  command = "npx astro build"
   publish = "dist"
 
 [build.environment]
   NODE_VERSION = "22"
+  NPM_CONFIG_PRODUCTION = "false"
 
-# Redirect /articles to the archive page cleanly
 [[redirects]]
   from  = "/articles"
   to    = "/articles/index.html"
   status = 200
 
-# Pretty URLs — remove .html extension
-[[plugins]]
-  package = "@netlify/plugin-sitemap"
-
-# Security & performance headers
 [[headers]]
   for = "/*"
   [headers.values]
@@ -26,14 +18,12 @@
     X-XSS-Protection       = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy        = "strict-origin-when-cross-origin"
+```
 
-# Cache static assets aggressively
-[[headers]]
-  for = "/fonts/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+The key changes are `npx astro build` instead of `astro build`, and `NPM_CONFIG_PRODUCTION = "false"` to force Netlify to install all dependencies.
 
-[[headers]]
-  for = "*.css"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+**Step 2 — Commit and push:**
+```
+git add netlify.toml
+git commit -m "Fix Netlify build: use npx astro build"
+git push
