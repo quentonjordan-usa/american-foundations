@@ -2,7 +2,7 @@
 // src/pages/articles/index.astro  — Full article archive
 import Base from '../../layouts/Base.astro';
 
-const allArticles = await Astro.glob('./*.md');
+const allArticles = await Astro.glob('./*.md').catch(() => []);
 const articles = allArticles
   .filter(a => new Date(a.frontmatter.date + 'T12:00:00') <= new Date())
   .sort((a, b) => new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime());
