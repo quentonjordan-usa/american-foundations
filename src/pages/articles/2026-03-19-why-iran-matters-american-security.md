@@ -5,8 +5,8 @@ pillar: "world"
 pillarName: "America in the World"
 day: "thursday"
 column: "The World View"
-description: "Iran isn't just a Middle East problem. It's a direct threat to American interests, allies, and the global order the US has underwritten for decades. Here's why conservatives have long viewed Iran as a serious national security concern."
-readTime: "4 min read"
+description: "Iran isn't just a Middle East problem. It's a direct threat to American interests, allies, and the global order America has underwritten for decades. Here's the full case for why the Trump administration was right to act."
+readTime: "5 min read"
 nextTitle: "War, Faith, and the American Soldier"
 nextSlug: "2026-03-20-war-faith-american-soldier"
 nextDate: "Friday, March 20 · Family, Faith & Culture"
@@ -14,24 +14,42 @@ nextPillar: "culture"
 layout: "../../layouts/Article.astro"
 ---
 
-To understand why the United States is now at war with Iran, you have to understand what Iran has represented for the past 45 years — not just to Israel, but to America.
+When critics ask why the United States is involved in a military conflict with Iran, the answer isn't complicated. It just requires paying attention to 45 years of history that too many people would rather forget.
 
-## Iran's Record
+## Iran's War on America
 
-Since the 1979 Islamic Revolution, Iran has been at open ideological war with the United States. It seized American hostages. It funded terrorist groups across the Middle East — Hezbollah in Lebanon, Hamas in Gaza, militias in Iraq and Yemen. American soldiers have been killed by Iranian-supplied weapons for decades.
+The Islamic Republic of Iran has been in a state of declared hostility toward the United States since 1979. This isn't ancient grievance — it's an ongoing operational reality.
 
-Iran has also pursued nuclear weapons capability in defiance of international agreements. A nuclear-armed Iran would fundamentally shift the balance of power in the region, trigger a proliferation cascade among neighboring states, and pose a direct threat to Israel — America's closest ally in the Middle East.
+Iran seized American diplomats and held them hostage for 444 days. It bombed US Marine barracks in Beirut in 1983, killing 241 Americans. It built, funded, and directed Hezbollah — a terrorist organization responsible for more American deaths than any group before September 11. It supplied the explosive devices that killed and maimed American soldiers in Iraq throughout the 2000s. It funded the Houthi militia in Yemen that has attacked US naval vessels. It directed militia groups in Syria and Iraq that regularly targeted American forces.
 
-## The Conservative Case for Clarity
+Throughout all of this, Iran's leadership has called for the destruction of Israel and described the United States as the "Great Satan." These aren't rhetorical flourishes. They are policy statements backed by decades of violent action.
 
-Conservatives have long argued that weakness invites aggression. The 2015 nuclear deal, negotiated by the Obama administration, gave Iran billions in sanctions relief in exchange for temporary limits on enrichment. Critics argued it delayed — rather than ended — Iran's nuclear ambitions. They weren't wrong.
+And through all of this, previous US administrations negotiated, sanctioned, looked away, and negotiated again.
 
-The Trump administration's maximum pressure campaign sought to bring Iran back to the table on stronger terms. When diplomacy hit a wall in late February, the decision was made to act militarily.
+## The Nuclear Question
 
-## What Success Looks Like
+The nuclear program changes everything. A conventional Iran is a manageable threat. A nuclear Iran is a civilizational one.
 
-A successful outcome means Iran's nuclear program is verifiably destroyed, its missile capabilities are degraded, and its ability to project terror across the region is weakened — without committing America to a decade-long occupation.
+By early 2026, Iran had accumulated enough enriched uranium for multiple nuclear devices. The IAEA confirmed enrichment at near-weapons-grade levels. Iran had simultaneously developed ballistic missiles capable of reaching Israel, US bases across the region, and parts of southeastern Europe.
 
-That's a high bar. It's achievable. But it requires clear objectives, honest communication with the American people, and a plan for what comes after the strikes.
+The 2015 nuclear deal — the JCPOA — was sold as a solution. It wasn't. It gave Iran $150 billion in sanctions relief, allowed its nuclear infrastructure to remain intact, and included sunset clauses that would have permitted full enrichment resumption within a decade. Iran used the relief money to accelerate its proxy network and missile development. The deal bought time for Iran, not safety for America.
 
-America's role in the world depends on its credibility. When it draws a line, it must be willing to hold it. On Iran's nuclear program, the line has been held.
+The Trump administration's maximum pressure campaign after 2018 successfully strangled Iran's economy and slowed its program. But diplomatic talks in early 2026 confirmed what serious analysts had warned: Iran had no intention of permanently surrendering its nuclear ambitions. It was running out the clock.
+
+## Why Acting Now Was the Right Call
+
+The conservative foreign policy tradition — from Reagan to the present — holds that American strength prevents war, and American weakness invites it. Every year of delay with Iran made the eventual confrontation more dangerous, not less.
+
+Consider what inaction would have produced: a nuclear-armed theocracy that openly funds terrorism, controls a network of proxy militias from Lebanon to Yemen, and sits astride the Strait of Hormuz — the chokepoint through which 20 percent of the world's oil supply flows. A nuclear Iran almost certainly triggers Saudi Arabia and Turkey to pursue their own weapons. A nuclear Middle East, governed by regimes with far lower deterrence thresholds than Cold War superpowers, is catastrophically unstable.
+
+The Trump administration chose to act before that scenario became irreversible. The strikes targeted nuclear facilities, missile infrastructure, and the leadership structure that has sustained Iran's four-decade campaign against American interests. These are legitimate military objectives by any standard.
+
+## The Conservative Responsibility
+
+Supporting this mission doesn't require abandoning skepticism — it requires directing it properly. The right questions aren't "should we have acted?" The right questions are: Are the objectives clearly defined? Is there a plan for what follows? Are we avoiding the open-ended commitments that drained American blood and treasure in Iraq and Afghanistan?
+
+President Trump has signaled the operation is limited in scope — targeting military capability, not occupying territory. That is the right framework. America's goal is a world in which Iran cannot threaten its neighbors with nuclear weapons, not a new nation-building project in the Middle East.
+
+Iran's leaders made a strategic miscalculation. They assumed that a combination of negotiating delays, economic resilience, and American political exhaustion would eventually let them cross the nuclear threshold unmolested.
+
+They were wrong. American strength, properly applied, has a way of correcting those kinds of miscalculations.
